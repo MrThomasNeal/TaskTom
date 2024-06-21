@@ -1,7 +1,7 @@
 #include "MyBot.h"
 #include <dpp/dpp.h>
 
-const std::string    BOT_TOKEN    = "";
+const std::string BOT_TOKEN = "";
 
 int main()
 {
@@ -24,15 +24,35 @@ int main()
 	});
 
 	bot.on_guild_member_add([&bot](const dpp::guild_member_add_t& event) {
-		
+
 		// Channel ID for welcome message to be displayed in
-		dpp::snowflake welcome_channel_id = ;
+		dpp::snowflake welcome_channel_id = 0;
+
+		dpp::snowflake guild_id = event.added.guild_id;
+		std::vector<dpp::snowflake> channels = event.adding_guild->channels;
+
+		for (const auto& channel : channels) {
+			if (channel) {
+				dpp::channel* tempChannel = dpp::find_channel(channel.get_process_id());
+				if (tempChannel) {
+					std::cout << tempChannel->name << std::endl;
+					if (tempChannel->name == "general") {
+						welcome_channel_id = tempChannel->id;
+					}
+				}
+			}
+		}
 
 		// Create the welcome message
 		std::string welcome_message = "Welcome to the server, " + event.added.get_user()->format_username() + "! Nice to see you :)";
 
 		// Send the welcome message to the specified channel
-		bot.message_create(dpp::message(welcome_channel_id, welcome_message));
+		if (welcome_channel_id != 0) {
+			bot.message_create(dpp::message(welcome_channel_id, welcome_message));
+		}
+		else {
+			std::cout << "ERROR: No 'general' channel found" << std::endl;
+		}
 
 	});
 
