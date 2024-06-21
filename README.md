@@ -10,3 +10,4 @@ Functionalities to add:
 - Set reminders
 - Event notification - set events and allow bot to remind people when they get close
 - Pomodoro timer
+- "The Big Lezifier" - turns some speech into a "Big Lez" style of grammar
